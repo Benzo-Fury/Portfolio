@@ -1,4 +1,3 @@
-# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
 on:
@@ -17,10 +16,10 @@ concurrency:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,18 +29,13 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Setup Node (for npx Tailwind)
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
+      - name: Install deps
         run: bun install
         env:
           BUN_INSTALL_DEV: 'true'
 
-      - name: Build CSS with Tailwind
-        run: npx tailwindcss -i ./src/styles/global.css -o ./dist/dist.css --minify
+      - name: Build CSS (Tailwind v4 CLI)
+        run: bunx @tailwindcss/cli -i ./src/styles/global.css -o ./dist/dist.css --minify
 
       - name: Build site with Bun
         run: bun build ./src/index.html --outdir=dist --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'
@@ -52,7 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: ./dist
 
       - name: Deploy to GitHub Pages
         id: deployment
