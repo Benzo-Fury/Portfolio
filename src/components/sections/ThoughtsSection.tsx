@@ -32,8 +32,8 @@ function ThoughtsSection({ registerRef }: Props) {
         setState(prev => ({ ...prev, loading: true, error: null }));
         const result = await fetchContent({ domain: 'blog' });
         
-        if (!cancelled) {
-          const blogPosts = (result.posts as BlogPost[]);
+        if (!cancelled && 'posts' in result) {
+          const blogPosts = result.posts as BlogPost[];
           const mapped: ThoughtPost[] = blogPosts.map((p) => ({
             title: p.title,
             excerpt: p.summary ?? "",
@@ -64,7 +64,7 @@ function ThoughtsSection({ registerRef }: Props) {
       id="thoughts"
       index={2}
       registerRef={registerRef}
-      className="min-h-screen py-20 sm:py-32 opacity-0"
+      className="py-20 sm:py-32 opacity-0"
     >
       <div className="space-y-12 sm:space-y-16">
         <div className="flex items-center justify-between">
