@@ -33,6 +33,10 @@ Focus on the code, not the person. Offer suggestions, not criticisms.
 
 Take the time to understand the context and implications of changes. Don't just skim the diff.
 
+```ts
+// This is some test code
+```
+
 \`\`\`typescript
 // Look beyond syntax - consider:
 // - Performance implications
