@@ -1,21 +1,22 @@
-# bun-react-template
+<div align="center">
+  <img width="800" alt="image" src="https://github.com/user-attachments/assets/39eac238-2509-4932-b5dc-d5d7f008ce1a" />
+</div>
 
-To install dependencies:
+# Neo's Portfolio & Blog
+This is my minimal portfolio and blog website.
 
-```bash
-bun install
-```
+You can view the hosting [here 🔗](https://neohaggard.com)
 
-To start a development server:
+## Techstack
+- Bun
+- React
+- Radix/ui
+- Tailwind
 
-```bash
-bun dev
-```
+New blog posts can be placed in the `/content/blog/` directory as markdown files.
 
-To run for production:
-
-```bash
-bun start
-```
-
-This project was created using `bun init` in bun v1.3.1. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+## Future Additions
+- Blog post writer
+  - GUI for writing blog posts that commits to this repo
+- Auto push posts to socials
+  - Github Action that summarizes and pushes the blog post to LinkedIn & X
