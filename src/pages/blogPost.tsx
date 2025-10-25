@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Prose } from "../components/Pose";
 import { MarkdownContent, parseMarkdown } from "../components/Markdown";
@@ -14,6 +14,7 @@ type BlogPostState = {
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const [state, setState] = useState<BlogPostState>({
     post: null,
     html: "",
@@ -77,7 +78,7 @@ export default function BlogPost() {
             title="Failed to load post"
             description={state.error ?? "Post not found"}
             actionLabel="Back to blog"
-            onAction={() => (window.location.href = "/blog")}
+            onAction={() => navigate("/blog")}
           />
         </main>
       </div>

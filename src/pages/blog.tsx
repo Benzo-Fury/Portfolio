@@ -89,24 +89,26 @@ function TagFilter({ tags, selectedTag, onTagSelect }: TagFilterProps) {
 
 function PostCard({ post }: { post: BlogPost }) {
   return (
-    <Card as="a" href={`/blog/${post.slug}`} className="space-y-3">
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>{new Date(post.date).toLocaleDateString(undefined, { year: "numeric", month: "short" })}</span>
-        <span>{post.readingTime} min read</span>
-      </div>
-      <h3 className="text-xl font-medium tracking-tight">{post.title}</h3>
-      <p className="text-muted-foreground leading-relaxed">{post.summary}</p>
-      <div className="flex flex-wrap gap-2 pt-2">
-        {post.tags.map((t) => (
-          <span
-            key={t}
-            className="px-2 py-0.5 text-xs rounded-full border border-border text-muted-foreground"
-          >
-            {t}
-          </span>
-        ))}
-      </div>
-    </Card>
+    <Link to={`/blog/${post.slug}`} className="block">
+      <Card className="space-y-3">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>{new Date(post.date).toLocaleDateString(undefined, { year: "numeric", month: "short" })}</span>
+          <span>{post.readingTime} min read</span>
+        </div>
+        <h3 className="text-xl font-medium tracking-tight">{post.title}</h3>
+        <p className="text-muted-foreground leading-relaxed">{post.summary}</p>
+        <div className="flex flex-wrap gap-2 pt-2">
+          {post.tags.map((t) => (
+            <span
+              key={t}
+              className="px-2 py-0.5 text-xs rounded-full border border-border text-muted-foreground"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </Card>
+    </Link>
   );
 }
 
@@ -129,10 +131,14 @@ export default function Blog() {
         setState(prev => ({ ...prev, loading: true, error: null }));
         const result = await fetchContent({ domain: 'blog' });
         
-        if (!cancelled) {
-          const allTags = Array.from(new Set(result.posts.flatMap((p) => 'tags' in p ? p.tags : []))).sort();
+        if (!cancelled && 'posts' in result) {
+          const blogPosts = result.posts as BlogPost[];
+          const allTags = Array.from(
+            new Set(blogPosts.flatMap(p => p.tags))
+          ).sort();
+          
           setState({
-            posts: result.posts as BlogPost[],
+            posts: blogPosts,
             loading: false,
             error: null,
             allTags

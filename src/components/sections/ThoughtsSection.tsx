@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Section from "../Section";
 import { ArrowRight } from "../icons/ArrowRight";
 import Button from "../generic/Button";
@@ -38,6 +39,7 @@ function ThoughtsSection({ registerRef }: Props) {
             excerpt: p.summary ?? "",
             date: new Date(p.date).toLocaleDateString("en-US", { month: "short", year: "numeric" }),
             readTime: `${p.readingTime} min`,
+            slug: p.slug,
           }));
 
           setState({ posts: mapped, loading: false, error: null });
@@ -103,7 +105,7 @@ function ThoughtsSection({ registerRef }: Props) {
 }
 
 export function ThoughtCard({ post }: { post: ThoughtPost }) {
-  return (
+  const content = (
     <Card>
       <div className="space-y-4">
         <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
@@ -124,6 +126,16 @@ export function ThoughtCard({ post }: { post: ThoughtPost }) {
       </div>
     </Card>
   );
+
+  if (post.slug) {
+    return (
+      <Link to={`/blog/${post.slug}`} className="block">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
 
 export default ThoughtsSection;
