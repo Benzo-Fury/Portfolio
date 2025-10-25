@@ -10,3 +10,9 @@ readingTime: 4
 # The Art of Code Review
 
 This is some test
+
+```json
+{
+    "JSON": "Javascript Object Notation"
+}
+```
