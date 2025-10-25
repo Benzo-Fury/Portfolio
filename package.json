@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --hot src/index.ts",
-    "build": "bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
+    "build": "bun tailwindcss -i ./src/styles/global.css -o ./dist/dist.css && bun build ./src/index.html --outdir=dist --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
     "start": "NODE_ENV=production bun src/index.ts"
   },
   "dependencies": {
@@ -29,7 +29,6 @@
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
     "autoprefixer": "^10.4.20",
-    "bun-plugin-tailwind": "^0.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
@@ -53,6 +52,7 @@
     "remark-gfm": "^4.0.1",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.5.5",
+    "tailwindcss": "^4.1.16",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
     "zod": "3.25.67"
@@ -61,6 +61,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/bun": "latest",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "bun-plugin-tailwind": "^0.1.2"
   }
 }
