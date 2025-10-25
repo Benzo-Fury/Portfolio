@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -140,5 +141,176 @@
       opacity: 1;
       transform: translateY(0);
     }
+  }
+}
+
+@layer components {
+  /* Prose code styles for inline and block code */
+  .prose :where(code):not(:where([class~="not-prose"] *)) {
+    @apply text-foreground bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .prose :where(pre):not(:where([class~="not-prose"] *)) {
+    @apply bg-muted border border-border rounded-lg p-4 overflow-x-auto my-6;
+  }
+
+  .prose :where(pre code):not(:where([class~="not-prose"] *)) {
+    @apply bg-transparent p-0 text-sm;
+  }
+
+  /* highlight.js base container */
+  .hljs {
+    @apply block overflow-x-auto p-4 bg-muted text-foreground;
+  }
+
+  /* Light theme token colors */
+  :root {
+    .hljs-comment,
+    .hljs-quote {
+      @apply text-muted-foreground italic;
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-subst {
+      @apply font-medium;
+      color: #859900; /* Solarized Green */
+    }
+
+    .hljs-number,
+    .hljs-literal,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-tag .hljs-attr {
+      color: #268bd2; /* Solarized Blue */
+    }
+
+    .hljs-string,
+    .hljs-doctag {
+      color: #2aa198; /* Solarized Cyan */
+    }
+
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id {
+      @apply font-semibold;
+      color: #b58900; /* Solarized Yellow */
+    }
+
+    .hljs-type,
+    .hljs-class .hljs-title {
+      color: #6c71c4; /* Solarized Violet */
+    }
+
+    .hljs-tag,
+    .hljs-name,
+    .hljs-attribute {
+      color: #268bd2; /* Solarized Blue */
+    }
+
+    .hljs-regexp,
+    .hljs-link {
+      color: #2aa198; /* Solarized Cyan */
+    }
+
+    .hljs-symbol,
+    .hljs-bullet {
+      color: #6c71c4; /* Solarized Violet */
+    }
+
+    .hljs-built_in,
+    .hljs-builtin-name {
+      color: #cb4b16; /* Solarized Orange */
+    }
+
+    .hljs-meta {
+      color: #93a1a1; /* Solarized Base1 */
+    }
+
+    .hljs-deletion {
+      background-color: rgba(220, 50, 47, 0.1); /* Solarized Red */
+      color: #dc322f;
+    }
+
+    .hljs-addition {
+      background-color: rgba(42, 161, 152, 0.1); /* Solarized Cyan */
+      color: #2aa198;
+    }
+
+    .hljs-emphasis { @apply italic; }
+    .hljs-strong { @apply font-bold; }
+  }
+
+  /* Dark theme token colors */
+  .dark {
+    .hljs-comment,
+    .hljs-quote {
+      @apply text-muted-foreground italic;
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-subst {
+      @apply font-medium;
+      color: #859900; /* Solarized Green */
+    }
+
+    .hljs-number,
+    .hljs-literal,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-tag .hljs-attr {
+      color: #268bd2; /* Solarized Blue */
+    }
+
+    .hljs-string,
+    .hljs-doctag {
+      color: #2aa198; /* Solarized Cyan */
+    }
+
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id {
+      @apply font-semibold;
+      color: #b58900; /* Solarized Yellow */
+    }
+
+    .hljs-type,
+    .hljs-class .hljs-title {
+      color: #6c71c4; /* Solarized Violet */
+    }
+
+    .hljs-tag,
+    .hljs-name,
+    .hljs-attribute {
+      color: #268bd2; /* Solarized Blue */
+    }
+
+    .hljs-regexp,
+    .hljs-link {
+      color: #2aa198; /* Solarized Cyan */
+    }
+
+    .hljs-symbol,
+    .hljs-bullet {
+      color: #6c71c4; /* Solarized Violet */
+    }
+
+    .hljs-built_in,
+    .hljs-builtin-name {
+      color: #cb4b16; /* Solarized Orange */
+    }
+
+    .hljs-meta { color: #93a1a1; /* Solarized Base1 */ }
+    .hljs-deletion {
+      background-color: rgba(220, 50, 47, 0.1); /* Solarized Red */
+      color: #dc322f;
+    }
+    .hljs-addition {
+      background-color: rgba(42, 161, 152, 0.1); /* Solarized Cyan */
+      color: #2aa198;
+    }
+    .hljs-emphasis { @apply italic; }
+    .hljs-strong { @apply font-bold; }
   }
 }

@@ -1,26 +1,21 @@
-import { fetchGithubPosts, fetchGithubPost } from "./fetchGithubPosts";
-import { posts as staticPosts } from "../content/posts";
+import { posts as staticThoughtPosts } from "../content/posts";
 
-export type ContentDomain = 'blog' | 'thoughts';
-
-export type ContentOptions = {
-  domain: ContentDomain;
-  slug?: string; // for single post
-  page?: number;
-  limit?: number;
-  search?: string;
-  tag?: string;
-};
+export class ContentError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ContentError";
+  }
+}
 
 export type BlogPost = {
   slug: string;
   title: string;
-  date: string;
   summary: string;
-  tags: string[];
+  content: string;
+  date: string;
   readingTime: number;
-  content?: string; // for single post
-  htmlUrl?: string;
+  tags: string[];
+  author?: string;
 };
 
 export type ThoughtPost = {
@@ -28,195 +23,230 @@ export type ThoughtPost = {
   excerpt: string;
   date: string;
   readTime: string;
-  slug?: string; // derived from title
+  slug?: string;
 };
 
-export type ContentResult = {
-  posts: (BlogPost | ThoughtPost)[];
-  hasMore?: boolean;
-  total?: number;
-  error?: string;
+type FetchArgs = {
+  domain: "blog" | "thoughts";
+  slug?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
 };
 
-export class ContentError extends Error {
-  constructor(
-    message: string,
-    public code: string,
-    public statusCode?: number
-  ) {
-    super(message);
-    this.name = 'ContentError';
-  }
-}
+type FetchListResult<T> = {
+  posts: T[];
+  total: number;
+  hasMore: boolean;
+};
 
-export async function fetchContent(options: ContentOptions): Promise<ContentResult> {
-  try {
-    if (options.domain === 'thoughts') {
-      return await fetchThoughts(options);
-    } else {
-      return await fetchBlogPosts(options);
-    }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to fetch content';
-    const code = error instanceof ContentError ? error.code : 'FETCH_ERROR';
-    throw new ContentError(message, code);
-  }
-}
+type FetchBlogPostResult = {
+  post: BlogPost | null;
+};
 
-async function fetchThoughts(options: ContentOptions): Promise<ContentResult> {
-  // For now, return static posts. In the future, this could fetch from GitHub
-  let filteredPosts = [...staticPosts];
+type Frontmatter = {
+  title: string;
+  date: string;
+  summary: string;
+  tags: string[];
+  author?: string;
+  readingTime?: number;
+};
+
+export async function fetchContent(args: FetchArgs): Promise<FetchListResult<BlogPost> | FetchListResult<ThoughtPost> | FetchBlogPostResult> {
+  const { domain, slug, search, page = 1, pageSize = 20 } = args;
+
+  if (domain === "thoughts") {
+    const withSlugs: ThoughtPost[] = staticThoughtPosts.map((p) => ({
+      ...p,
+      slug: slugify(p.title),
+    }));
+
+    const filtered = (search
+      ? withSlugs.filter(
+          (p) =>
+            p.title.toLowerCase().includes(search.toLowerCase()) ||
+            p.excerpt.toLowerCase().includes(search.toLowerCase())
+        )
+      : withSlugs);
+
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const slice = filtered.slice(start, end);
+
+    return {
+      posts: slice,
+      total: filtered.length,
+      hasMore: end < filtered.length,
+    };
+  }
+
+  // Blog domain - fetch from GitHub
+  if (slug) {
+    const post = await fetchGithubPost(slug);
+    return { post };
+  }
+
+  const allPosts = await fetchGithubPosts();
   
-  // Add slug to each post for consistency
-  let postsWithSlug = filteredPosts.map(post => ({
-    ...post,
-    slug: post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-  }));
+  const filtered = search
+    ? allPosts.filter(
+        (p) =>
+          p.title.toLowerCase().includes(search.toLowerCase()) ||
+          p.summary.toLowerCase().includes(search.toLowerCase())
+      )
+    : allPosts;
 
-  // Apply search filter
-  if (options.search) {
-    const searchLower = options.search.toLowerCase();
-    postsWithSlug = postsWithSlug.filter(post => 
-      post.title.toLowerCase().includes(searchLower) ||
-      post.excerpt.toLowerCase().includes(searchLower)
-    );
-  }
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  const slice = filtered.slice(start, end);
 
   return {
-    posts: postsWithSlug,
-    total: postsWithSlug.length,
-    hasMore: false
+    posts: slice,
+    total: filtered.length,
+    hasMore: end < filtered.length,
   };
 }
 
-async function fetchBlogPosts(options: ContentOptions): Promise<ContentResult> {
-  if (options.slug) {
-    // Fetch single post
-    try {
-      const post = await fetchGithubPost({ slug: options.slug });
-      const parsed = parseFrontmatter(post.content);
-      const frontmatter = parsed.frontmatter;
-      
-      const blogPost: BlogPost = {
-        slug: options.slug,
-        title: frontmatter.title || options.slug,
-        date: frontmatter.date || new Date().toISOString().split('T')[0],
-        summary: frontmatter.summary || '',
-        tags: frontmatter.tags || [],
-        readingTime: frontmatter.readingTime || 5,
-        content: parsed.body,
-        htmlUrl: post.htmlUrl
-      };
+const GITHUB_API = "https://api.github.com";
+const GITHUB_RAW = "https://raw.githubusercontent.com";
+const GITHUB_OWNER = "Benzo-Fury";
+const GITHUB_REPO = "Portfolio";
+const GITHUB_BRANCH = "main";
 
-      return {
-        posts: [blogPost],
-        total: 1,
-        hasMore: false
-      };
-    } catch (error) {
-      throw new ContentError(
-        `Post '${options.slug}' not found`,
-        'POST_NOT_FOUND',
-        404
-      );
+async function fetchGithubPosts(): Promise<BlogPost[]> {
+  try {
+    // Fetch the directory listing from GitHub
+    const response = await fetch(
+      `${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/src/content/blog`,
+      {
+        headers: {
+          Accept: "application/vnd.github.v3+json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new ContentError(`GitHub API error: ${response.status} - ${errorData}`);
     }
-  } else {
-    // Fetch multiple posts
-    const result = await fetchGithubPosts({
-      page: options.page || 1,
-      maxAmount: options.limit || 10
-    });
 
-    const blogPosts: BlogPost[] = await Promise.all(
-      result.posts.map(async (post) => {
-        try {
-          const content = await fetch(post.url).then(r => r.text());
-          const parsed = parseFrontmatter(content);
-          const frontmatter = parsed.frontmatter;
-          
-          return {
-            slug: post.slug,
-            title: frontmatter.title || post.slug,
-            date: frontmatter.date || new Date().toISOString().split('T')[0],
-            summary: frontmatter.summary || '',
-            tags: frontmatter.tags || [],
-            readingTime: frontmatter.readingTime || 5,
-            htmlUrl: post.htmlUrl
-          };
-        } catch {
-          // Fallback for posts that can't be parsed
-          return {
-            slug: post.slug,
-            title: post.slug,
-            date: new Date().toISOString().split('T')[0],
-            summary: '',
-            tags: [],
-            readingTime: 5,
-            htmlUrl: post.htmlUrl
-          };
-        }
+    const files = await response.json() as Array<{ name: string; path: string }>;
+    const mdFiles = files.filter((f) => f.name.endsWith(".md"));
+
+    const posts = await Promise.all(
+      mdFiles.map(async (file) => {
+        const slug = file.name.replace(".md", "");
+        return await fetchGithubPost(slug);
       })
     );
 
-    // Apply filters
-    let filteredPosts = blogPosts;
-    
-    if (options.search) {
-      const searchLower = options.search.toLowerCase();
-      filteredPosts = filteredPosts.filter(post => 
-        post.title.toLowerCase().includes(searchLower) ||
-        post.summary.toLowerCase().includes(searchLower)
-      );
+    return posts
+      .filter((p): p is BlogPost => p !== null)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } catch (error) {
+    console.error("Failed to fetch blog posts from GitHub:", error);
+    throw new ContentError("Failed to load blog posts");
+  }
+}
+
+async function fetchGithubPost(slug: string): Promise<BlogPost | null> {
+  try {
+    const response = await fetch(
+      `${GITHUB_RAW}/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/src/content/blog/${slug}.md`
+    );
+
+    if (!response.ok) {
+      return null;
     }
 
-    if (options.tag) {
-      filteredPosts = filteredPosts.filter(post => 
-        post.tags.includes(options.tag!)
-      );
-    }
+    const content = await response.text();
+    const parsed = parseFrontmatter(content);
+    
+    if (!parsed) return null;
 
     return {
-      posts: filteredPosts,
-      total: filteredPosts.length,
-      hasMore: result.hasMore
+      slug,
+      title: parsed.frontmatter.title,
+      summary: parsed.frontmatter.summary,
+      content: parsed.content,
+      date: parsed.frontmatter.date,
+      readingTime: parsed.frontmatter.readingTime ?? calculateReadingTime(parsed.content),
+      tags: parsed.frontmatter.tags,
+      author: parsed.frontmatter.author,
     };
+  } catch (error) {
+    console.error(`Failed to fetch blog post ${slug}:`, error);
+    return null;
   }
 }
 
-// Simple frontmatter parser (you may want to use a proper library)
-function parseFrontmatter(content: string): { frontmatter: any; body: string } {
-  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
-  
-  if (!match) {
-    return { frontmatter: {}, body: content };
-  }
+function parseFrontmatter(raw: string): { frontmatter: Frontmatter; content: string } | null {
+  const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!match || !match[1] || !match[2]) return null;
 
-  const frontmatterText = match[1];
-  const body = match[2];
-  
-  const frontmatter: any = {};
-  frontmatterText.split('\n').forEach(line => {
-    const colonIndex = line.indexOf(':');
-    if (colonIndex > 0) {
-      const key = line.slice(0, colonIndex).trim();
-      let value = line.slice(colonIndex + 1).trim();
-      
-      // Remove quotes if present
-      if ((value.startsWith('"') && value.endsWith('"')) || 
-          (value.startsWith("'") && value.endsWith("'"))) {
-        value = value.slice(1, -1);
-      }
-      
-      // Parse arrays (simple format: [item1, item2, item3])
-      if (value.startsWith('[') && value.endsWith(']')) {
-        const arrayContent = value.slice(1, -1);
-        frontmatter[key] = arrayContent.split(',').map(item => item.trim().replace(/['"]/g, ''));
-      } else {
-        frontmatter[key] = value;
-      }
+  const frontmatterStr = match[1];
+  const content = match[2];
+  const frontmatter: Partial<Frontmatter> = {};
+
+  for (const line of frontmatterStr.split("\n")) {
+    const colonIndex = line.indexOf(":");
+    if (colonIndex === -1) continue;
+    
+    const key = line.slice(0, colonIndex).trim();
+    let value: any = line.slice(colonIndex + 1).trim();
+    
+    // Remove quotes
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
     }
-  });
+    
+    // Parse arrays
+    if (value.startsWith("[") && value.endsWith("]")) {
+      value = value
+        .slice(1, -1)
+        .split(",")
+        .map((v: string) => v.trim().replace(/^["']|["']$/g, ""));
+    }
+    
+    // Parse numbers
+    if (key === "readingTime" && !Number.isNaN(Number(value))) {
+      value = Number(value);
+    }
+    
+    frontmatter[key as keyof Frontmatter] = value;
+  }
 
-  return { frontmatter, body };
+  if (!frontmatter.title || !frontmatter.date || !frontmatter.summary) {
+    return null;
+  }
+
+  return {
+    frontmatter: {
+      title: frontmatter.title,
+      date: frontmatter.date,
+      summary: frontmatter.summary,
+      tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
+      author: frontmatter.author,
+      readingTime: frontmatter.readingTime,
+    },
+    content,
+  };
 }
+
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200;
+  const words = content.trim().split(/\s+/).length;
+  return Math.ceil(words / wordsPerMinute);
+}
+
+function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+
