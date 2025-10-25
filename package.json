@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --hot src/index.ts",
-    "build": "bunx tailwindcss -i ./src/styles/global.css -o ./dist/dist.css && bun build ./src/index.html --outdir=dist --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
+    "build": "bun tailwindcss -i ./src/styles/global.css -o ./dist/dist.css && bun build ./src/index.html --outdir=dist --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
     "start": "NODE_ENV=production bun src/index.ts"
   },
   "dependencies": {
