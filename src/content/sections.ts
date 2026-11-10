@@ -1,3 +1,1 @@
-export const sections = ["intro", "projects", "thoughts", "connect"] as const;
-
-
+export const sections = ["intro", "projects", "connect"] as const;

@@ -8,14 +8,11 @@ import "./styles/global.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
-import { BrowserRouter } from "react-router-dom";
 
 const elem = document.getElementById("root")!;
 const app = (
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </StrictMode>
 );
 

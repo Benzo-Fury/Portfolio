@@ -13,7 +13,7 @@ function ConnectSection({ registerRef, email, socials }: Props) {
   return (
     <Section
       id="connect"
-      index={3}
+      index={2}
       registerRef={registerRef}
       className="py-20 sm:py-32 opacity-0"
     >
