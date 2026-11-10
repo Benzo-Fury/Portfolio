@@ -5,6 +5,7 @@ import DecodeText from "../effects/DecodeText";
 import Reveal from "../effects/Reveal";
 import CountUp from "../effects/CountUp";
 import Collapse from "../effects/Collapse";
+import ImageLightbox from "../effects/ImageLightbox";
 import type { Project } from "../../content";
 import { cn } from "../../lib/utils";
 
@@ -137,14 +138,9 @@ function ProjectDetails({ item, className }: { item: Project; className?: string
         )}
       >
         {item.images.map((image) => (
-          <img
+          <ImageLightbox
             key={image.src}
-            src={image.src}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
-            loading="lazy"
-            decoding="async"
+            image={image}
             className="h-auto w-full rounded-lg border border-border bg-muted"
           />
         ))}
