@@ -2,6 +2,9 @@ import Section from "../Section";
 import { ArrowRight } from "../icons/ArrowRight";
 import type { Social } from "../../content";
 import Card from "../generic/Card";
+import DecodeText from "../effects/DecodeText";
+import Reveal from "../effects/Reveal";
+import SpotlightGroup from "../effects/SpotlightGroup";
 
 type Props = {
   registerRef: (index: number) => (el: HTMLElement | null) => void;
@@ -15,11 +18,13 @@ function ConnectSection({ registerRef, email, socials }: Props) {
       id="connect"
       index={2}
       registerRef={registerRef}
-      className="py-20 sm:py-32 opacity-0"
+      className="py-20 sm:py-32"
     >
       <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
-        <div className="space-y-6 sm:space-y-8">
-          <h2 className="text-3xl sm:text-4xl font-light">Let's Connect</h2>
+        <Reveal stagger className="space-y-6 sm:space-y-8">
+          <h2 className="text-3xl sm:text-4xl font-light">
+            <DecodeText text="Let's Connect" />
+          </h2>
 
           <div className="space-y-6">
             <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
@@ -37,18 +42,20 @@ function ConnectSection({ registerRef, email, socials }: Props) {
               </a>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         <div className="space-y-6 sm:space-y-8">
-          <div className="text-sm text-muted-foreground font-mono">
+          <Reveal className="text-sm text-muted-foreground font-mono">
             ELSEWHERE
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {socials.map((social) => (
-              <SocialCard key={social.name} social={social} />
-            ))}
-          </div>
+          <SpotlightGroup>
+            <Reveal stagger className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:[&>:last-child:nth-child(odd)]:col-span-2">
+              {socials.map((social) => (
+                <SocialCard key={social.name} social={social} />
+              ))}
+            </Reveal>
+          </SpotlightGroup>
         </div>
       </div>
     </Section>
@@ -59,7 +66,7 @@ function SocialCard({ social }: { social: Social }) {
   const Icon = social.icon;
   return (
     <a href={social.url} target="_blank" rel="noreferrer" className="block">
-      <Card className="p-4 sm:p-4 hover:shadow-sm duration-300">
+      <Card data-spotlight="border" className="p-4 sm:p-4 hover:shadow-sm duration-300">
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-foreground group-hover:text-muted-foreground transition-colors duration-300">
             {Icon ? <Icon className="w-4 h-4" /> : null}

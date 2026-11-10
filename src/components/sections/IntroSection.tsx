@@ -1,4 +1,7 @@
 import Section from "../Section";
+import DotField from "../effects/DotField";
+import DecodeText from "../effects/DecodeText";
+import Reveal from "../effects/Reveal";
 
 type SectionProps = {
   registerRef: (index: number) => (el: HTMLElement | null) => void;
@@ -11,22 +14,29 @@ function IntroSection({ registerRef, skills }: SectionProps) {
       id="intro"
       index={0}
       registerRef={registerRef}
-      className="min-h-screen flex items-center opacity-0 pt-2.5 sm:pt-0"
+      className="relative isolate min-h-screen flex items-center pt-2.5 sm:pt-0"
     >
+      {/* Full-bleed interactive background, fading out toward the next section */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+      >
+        <DotField />
+      </div>
+
       <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
         <div className="lg:col-span-3 space-y-6 sm:space-y-8">
           <div className="space-y-3 sm:space-y-2">
-            <div className="text-sm text-muted-foreground font-mono tracking-wider">
+            <Reveal className="text-sm text-muted-foreground font-mono tracking-wider">
               PORTFOLIO / 2026
-            </div>
+            </Reveal>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
-              Neo
-              <br />
-              <span className="text-muted-foreground">Haggard</span>
+              <DecodeText text="Neo" trigger="mount" delay={150} className="block" />
+              <DecodeText text="Haggard" trigger="mount" delay={300} className="block text-muted-foreground" />
             </h1>
           </div>
 
-          <div className="space-y-6 max-w-md">
+          <Reveal stagger delay={250} className="space-y-6 max-w-md">
             <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
               19 y/o Full-stack Developer building end-to-end products, from
               scalable backends to polished interfaces, at the intersection of
@@ -37,21 +47,21 @@ function IntroSection({ registerRef, skills }: SectionProps) {
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-signal rounded-full animate-pulse"></div>
                 Available for work
               </div>
               <div>Australia</div>
             </div>
-          </div>
+          </Reveal>
         </div>
 
-        <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
+        <Reveal stagger delay={450} className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
           <div className="space-y-4">
             <div className="text-sm text-muted-foreground font-mono">
               CURRENTLY
             </div>
             <div className="space-y-2">
-              <div className="text-foreground">Full-stack Developer</div>
+              <DecodeText text="Full-stack Developer" trigger="mount" delay={700} className="block text-foreground" />
               <div className="text-muted-foreground">for freelance</div>
               <div className="text-xs text-muted-foreground">
                 2024 — Present
@@ -59,7 +69,7 @@ function IntroSection({ registerRef, skills }: SectionProps) {
             </div>
           </div>
           <Skills skills={skills} />
-        </div>
+        </Reveal>
       </div>
     </Section>
   );

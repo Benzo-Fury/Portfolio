@@ -19,7 +19,6 @@ export function useSectionObserver(sectionIds: string[]) {
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up");
             const id = (entry.target as HTMLElement).id;
             if (id) setActiveSection(id);
           }

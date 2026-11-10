@@ -36,6 +36,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* Brand signal green: the "available" dot, activity graph and click ripples */
+  --signal: oklch(0.62 0.17 150);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark {
@@ -71,6 +74,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  --signal: oklch(0.74 0.18 150);
 }
 
 @theme inline {
@@ -110,6 +114,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-signal: var(--signal);
 }
 
 @layer base {
@@ -126,19 +131,86 @@
 }
 
 
-@layer utilities {
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
+html {
+  overflow-x: clip;
+}
 
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+/* ---------- Scroll reveals (components/effects/Reveal.tsx) ---------- */
+
+.reveal,
+.reveal-group > * {
+  opacity: 0;
+  translate: 0 18px;
+  filter: blur(6px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    translate 0.9s var(--ease-out-expo),
+    filter 0.9s var(--ease-out-expo);
+  transition-delay: calc(var(--reveal-delay, 0ms) + var(--reveal-index, 0) * 90ms);
+}
+.reveal[data-in="true"],
+.reveal-group[data-in="true"] > * {
+  opacity: 1;
+  /* none, not 0 0: any translate value turns the element into a containing block */
+  translate: none;
+  filter: none;
+}
+.reveal-group > :nth-child(2) { --reveal-index: 1; }
+.reveal-group > :nth-child(3) { --reveal-index: 2; }
+.reveal-group > :nth-child(4) { --reveal-index: 3; }
+.reveal-group > :nth-child(5) { --reveal-index: 4; }
+
+/* ---------- Spotlight (components/effects/SpotlightGroup.tsx) ---------- */
+
+[data-spotlight] {
+  position: relative;
+  isolation: isolate;
+}
+/* Lit border: a gradient ring masked to the 1px edge */
+[data-spotlight="border"]::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: radial-gradient(180px circle at var(--mx, -9999px) var(--my, -9999px),
+      color-mix(in oklch, var(--foreground) 70%, transparent), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+/* Soft glow behind the content */
+[data-spotlight]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(260px circle at var(--mx, -9999px) var(--my, -9999px),
+      color-mix(in oklch, var(--foreground) 7%, transparent), transparent 70%);
+}
+[data-spotlight]:hover::after {
+  opacity: 1;
+}
+
+/* ---------- Circular theme switch (lib/useThemeToggle.ts) ---------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-group > * {
+    opacity: 1;
+    translate: none;
+    filter: none;
+    transition: none;
   }
 }

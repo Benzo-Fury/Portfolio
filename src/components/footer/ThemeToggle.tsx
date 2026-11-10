@@ -1,15 +1,20 @@
 import { Sun } from "../icons/Sun";
 import { Moon } from "../icons/Moon";
+import type { ThemeOrigin } from "../../lib/useThemeToggle";
 
 type Props = {
   isDark: boolean;
-  onClick: () => void;
+  /** Receives the button's centre so the theme transition can grow from it */
+  onClick: (origin: ThemeOrigin) => void;
 };
 
 export function ThemeToggle({ isDark, onClick }: Props) {
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        onClick({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+      }}
       className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
       aria-label="Toggle theme"
     >

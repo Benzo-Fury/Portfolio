@@ -1,8 +1,9 @@
 import ThemeToggle from "./ThemeToggle";
+import type { ThemeOrigin } from "../../lib/useThemeToggle";
 
 type Props = {
   isDark: boolean;
-  onToggleTheme: () => void;
+  onToggleTheme: (origin: ThemeOrigin) => void;
 };
 
 export function Footer({ isDark, onToggleTheme }: Props) {
