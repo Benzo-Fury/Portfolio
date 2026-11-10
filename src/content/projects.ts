@@ -10,7 +10,7 @@ export const projects: Project[] = [
     year: "2025",
     name: "Unionize",
     description:
-      "Large scale Discord bot for creating humerous & silly families within Discord.",
+      "Large scale Discord bot for creating humorous & silly families within Discord.",
     tech: ["Bun", "TypeScript", "MongoDB", "Neo4j"],
   },
   {

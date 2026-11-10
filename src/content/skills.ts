@@ -1,5 +1,7 @@
 export const skills = [
-  "Typescript",
+  "TypeScript",
+  "React",
+  "Tailwind CSS",
   "Bun",
   "MongoDB",
   "Git",

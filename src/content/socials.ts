@@ -1,5 +1,5 @@
 import { Linkedin, type LucideIcon } from "lucide-react";
-import { SiGithub, SiInstagram, SiDiscord } from "@icons-pack/react-simple-icons";
+import { SiGithub, SiDiscord } from "@icons-pack/react-simple-icons";
 
 export type Social = {
   name: string;
@@ -20,12 +20,6 @@ export const socials: Social[] = [
     handle: "@neo-haggard",
     url: "https://www.linkedin.com/in/neo-haggard-515750388/",
     icon: Linkedin,
-  },
-  {
-    name: "Instagram",
-    handle: "@neo.develops",
-    url: "https://www.instagram.com/neo.develops/",
-    icon: SiInstagram,
   },
   {
     name: "Discord",

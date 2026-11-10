@@ -18,7 +18,7 @@ function ProjectsSection({ registerRef, projects }: Props) {
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <h2 className="text-3xl sm:text-4xl font-light">Projects</h2>
           <div className="text-sm text-muted-foreground font-mono">
-            2020 — 2025
+            2020 — 2026
           </div>
         </div>
 

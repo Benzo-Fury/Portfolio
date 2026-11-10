@@ -17,7 +17,7 @@ function IntroSection({ registerRef, skills }: SectionProps) {
         <div className="lg:col-span-3 space-y-6 sm:space-y-8">
           <div className="space-y-3 sm:space-y-2">
             <div className="text-sm text-muted-foreground font-mono tracking-wider">
-              PORTFOLIO / 2025
+              PORTFOLIO / 2026
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
               Neo
@@ -28,9 +28,9 @@ function IntroSection({ registerRef, skills }: SectionProps) {
 
           <div className="space-y-6 max-w-md">
             <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-              17 y/o Backend Developer architecting scalable systems at the
-              intersection of
-              <span className="text-foreground"> moduralarity</span>,
+              19 y/o Full-stack Developer building end-to-end products, from
+              scalable backends to polished interfaces, at the intersection of
+              <span className="text-foreground"> modularity</span>,
               <span className="text-foreground"> performance</span>, and
               <span className="text-foreground"> maintainability</span>.
             </p>
@@ -51,7 +51,7 @@ function IntroSection({ registerRef, skills }: SectionProps) {
               CURRENTLY
             </div>
             <div className="space-y-2">
-              <div className="text-foreground">Backend Developer</div>
+              <div className="text-foreground">Full-stack Developer</div>
               <div className="text-muted-foreground">for freelance</div>
               <div className="text-xs text-muted-foreground">
                 2024 — Present
