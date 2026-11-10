@@ -1,6 +1,14 @@
-import unionizeBanner from "../public/projects/unionize.jpg";
-import inboxerBanner from "../public/projects/inboxer.jpg";
-import proxeBanner from "../public/projects/proxe.jpg";
+import crmHome from "../public/projects/crm-home.jpg";
+import crmLeads from "../public/projects/crm-leads.jpg";
+import meetRoom from "../public/projects/meet-room.jpg";
+import meetSetup from "../public/projects/meet-setup.jpg";
+import meetChat from "../public/projects/meet-chat.jpg";
+import riptideLibrary from "../public/projects/riptide-library.jpg";
+import riptideFiles from "../public/projects/riptide-files.jpg";
+import riptideSwarm from "../public/projects/riptide-swarm.jpg";
+import sistaToday from "../public/projects/sista-today.jpg";
+import sistaOnboarding from "../public/projects/sista-onboarding.jpg";
+import sistaArticle from "../public/projects/sista-article.jpg";
 
 export type ProjectImage = {
   src: string;
@@ -30,60 +38,86 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    year: "2025",
-    name: "Unionize",
+    year: "2026",
+    name: "POL CRM",
     description:
-      "Large scale Discord bot for creating humorous & silly families within Discord.",
-    tech: ["Bun", "TypeScript", "MongoDB", "Neo4j"],
+      "Custom sales CRM built for a US company, serving almost 10,000 users.",
+    tech: ["TypeScript", "React", "PostgreSQL", "AI"],
     summary:
-      "A free, modern Discord bot for building families: proposals, marriages and adoptions, including poly relationships, with family trees you can pull up in any server.",
+      "A purpose-built CRM that replaced off-the-shelf tooling for a US sales organisation. Reps open it to a daily brief of the leads that need them, then work the pipeline from one fast, keyboard-driven table.",
     highlights: [
-      "Relationships live in a Neo4j graph; everything else in MongoDB",
-      "Commands work through typed models and never touch raw Cypher",
-      "/tree draws a member's whole family tree on demand",
-      "Built on the sern framework with versioned feature flags",
+      "Serves almost 10,000 users",
+      "Home brief with pipeline, response time and win-rate metrics",
+      "Ask-anything AI bar for querying leads and drafting follow-ups",
+      "Lead table with filters, scoring and a side panel for activity, emails and tasks",
     ],
     images: [
-      { src: unionizeBanner, alt: "Unionize logo with heart accents and a diamond ring", width: 1600, height: 640 },
+      { src: crmHome, alt: "CRM home screen with daily lead brief, metrics and leads needing attention", width: 1600, height: 1098 },
+      { src: crmLeads, alt: "CRM lead table with a lead's details and activity open in a side panel", width: 1600, height: 1000 },
     ],
-    links: [{ label: "GitHub", url: "https://github.com/Benzo-Fury/Unionize" }],
+    links: [],
   },
   {
-    year: "2025",
-    name: "Inboxer",
+    year: "2026",
+    name: "Riptide",
     description:
-      "Open-source AI assistant to label, archive, and draft email responses automatically.",
-    tech: ["AI", "Google Cloud", "Pub/Sub", "Bun", "TypeScript", "MongoDB"],
+      "Desktop BitTorrent client running on a Rust engine I wrote from scratch, benchmarked faster than qBittorrent.",
+    tech: ["Rust", "TypeScript", "React", "Electrobun"],
     summary:
-      "Connect a Gmail account and Inboxer sorts new mail into labels and drafts replies the moment it arrives, so the inbox is triaged before you open it.",
+      "A modern alternative to qBittorrent and Transmission. Under the clean interface is Undercurrent, my own BitTorrent engine in under 8,000 lines of Rust, which outpaced every engine it was benchmarked against.",
     highlights: [
-      "Real-time processing from Gmail push notifications over Pub/Sub",
-      "AI-generated draft replies and automatic labelling",
-      "Quota-aware Gmail client with a concurrency-safe pipeline",
-      "Built-in OAuth server for connecting accounts",
+      "Custom Rust engine, faster than libtorrent in head-to-head benchmarks",
+      "Seeds at up to 88 Gbit/s locally, versus 54 Gbit/s for qBittorrent",
+      "Locks all traffic to a VPN and stops the moment it drops",
+      "Pick exactly which files to download before any data moves",
     ],
     images: [
-      { src: inboxerBanner, alt: "Inboxer wordmark over a pattern of envelopes", width: 1600, height: 1066 },
+      { src: riptideLibrary, alt: "Riptide torrent list with several downloads in progress", width: 1600, height: 1000 },
+      { src: riptideFiles, alt: "A torrent's file list with checkboxes to choose what to download", width: 1600, height: 1000 },
+      { src: riptideSwarm, alt: "Swarm view showing peers by round-trip time", width: 1600, height: 1000 },
     ],
-    links: [{ label: "GitHub", url: "https://github.com/Benzo-Fury/Inboxer" }],
+    links: [{ label: "GitHub", url: "https://github.com/Benzo-Fury/Riptide" }],
   },
   {
-    year: "2024",
-    name: "ProxE",
+    year: "2026",
+    name: "Private Video Conferencing",
     description:
-      "Lightweight, Python-based proxy server designed for speed, simplicity, and control.",
-    tech: ["Python", "Tunneling", "Encryption"],
+      "Zoom-style video conferencing built into a company portal, so meetings can't leak through shareable links.",
+    tech: ["Next.js", "Zoom Video SDK", "PostgreSQL", "TypeScript"],
     summary:
-      "A small proxy server that gives you control over every byte: HTTP and HTTPS tunnelling, per-user authentication and a full request log, with no external services.",
+      "A small company was running its events over plain Zoom links that anyone could forward. This replaces them with a branded meeting room inside their own portal, where only members and registered guests get in and hosts control who's admitted.",
     highlights: [
-      "HTTP proxying and HTTPS tunnelling via CONNECT",
-      "Request logging and user authentication in an embedded TinyDB",
-      "Event-based structure that is easy to extend",
-      "Configured by file or command-line flags",
+      "Meetings only reachable by invited members and guests",
+      "Everything people expect from Zoom, inside the company's own portal",
+      "Hosts stay in control of who joins and what happens in the room",
+      "Fully branded experience with no third-party links to share",
     ],
     images: [
-      { src: proxeBanner, alt: "ProxE wordmark in pixel type over a dark globe grid", width: 960, height: 540 },
+      { src: meetRoom, alt: "Live session room in speaker view with the meeting toolbar", width: 800, height: 500 },
+      { src: meetSetup, alt: "Pre-join setup screen with camera preview and device pickers", width: 800, height: 500 },
+      { src: meetChat, alt: "Live session with the chat panel open", width: 800, height: 500 },
     ],
-    links: [{ label: "GitHub", url: "https://github.com/Benzo-Fury/ProxE" }],
+    links: [],
+  },
+  {
+    year: "2026",
+    name: "Sista",
+    description:
+      "Women's cycle tracking app with predictions, symptom logging and personalised insights.",
+    tech: ["React Native", "Expo", "TypeScript"],
+    summary:
+      "A calm, dark-first cycle tracker. Sista predicts periods and ovulation, makes logging flow, symptoms and mood a single tap, and turns what you log into articles tied to your own cycle.",
+    highlights: [
+      "Today view with a cycle curve showing where you are and what's next",
+      "Quick logging for flow, symptoms and mood",
+      "Onboarding tailored to goals, including fertility and perimenopause",
+      "Learn articles personalised with patterns from your past cycles",
+    ],
+    images: [
+      { src: sistaToday, alt: "Sista today screen showing ovulation likely today on a cycle curve", width: 794, height: 1600 },
+      { src: sistaOnboarding, alt: "Sista onboarding asking what the app should help with", width: 791, height: 1600 },
+      { src: sistaArticle, alt: "Sista article on why sleep shifts before your period", width: 799, height: 1600 },
+    ],
+    links: [],
   },
 ];
