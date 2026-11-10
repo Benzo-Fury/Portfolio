@@ -3,6 +3,9 @@ name: Deploy static content to Pages
 on:
   push:
     branches: ["main"]
+  # Rebuild daily so the GitHub activity graph stays current
+  schedule:
+    - cron: "0 18 * * *"
   workflow_dispatch:
 
 permissions:
@@ -33,6 +36,11 @@ jobs:
         run: bun install
         env:
           BUN_INSTALL_DEV: 'true'
+
+      - name: Fetch GitHub activity
+        run: bun scripts/github-activity.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build CSS (Tailwind v4 CLI)
         run: bunx @tailwindcss/cli -i ./src/styles/global.css -o ./dist/dist.css --minify

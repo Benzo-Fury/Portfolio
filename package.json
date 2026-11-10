@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "bun --hot src/index.ts",
-    "build": "bunx tailwindcss -i ./src/styles/global.css -o ./dist/dist.css && bun build ./src/index.html --outdir=dist --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
-    "start": "NODE_ENV=production bun src/index.ts"
+    "build": "bun run activity && bunx tailwindcss -i ./src/styles/global.css -o ./dist/dist.css && bun build ./src/index.html --outdir=dist --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
+    "start": "NODE_ENV=production bun src/index.ts",
+    "activity": "bun scripts/github-activity.ts"
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^13.8.0",

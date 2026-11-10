@@ -1,10 +1,11 @@
 import { useSectionObserver } from "../lib/useSectionObserver";
 import { useThemeToggle } from "../lib/useThemeToggle";
-import { sections, skills, projects, socials, contactEmail } from "../content";
+import { sections, skills, projects, socials, contactEmail, activity } from "../content";
 import NavigationDots from "../components/NavigationDots";
 import Footer from "../components/footer/Footer";
 import IntroSection from "../components/sections/IntroSection";
 import ProjectsSection from "../components/sections/ProjectsSection";
+import ActivitySection from "../components/sections/ActivitySection";
 import ConnectSection from "../components/sections/ConnectSection";
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
       <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
         <IntroSection registerRef={registerSectionRef} skills={skills} />
         <ProjectsSection registerRef={registerSectionRef} projects={projects} />
+        <ActivitySection registerRef={registerSectionRef} activity={activity} />
         <ConnectSection registerRef={registerSectionRef} email={contactEmail} socials={socials} />
         <Footer isDark={isDark} onToggleTheme={toggleTheme} />
       </main>

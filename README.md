@@ -12,3 +12,8 @@ You can view the hosting [here 🔗](https://neohaggard.com)
 - React
 - Radix/ui
 - Tailwind
+
+## GitHub activity
+The Activity section reads `src/content/github-activity.json`. Refresh it with `bun run activity`
+(set `GH_TOKEN` or `GITHUB_TOKEN` for a higher rate limit). The deploy workflow refreshes it on
+every push and once a day.

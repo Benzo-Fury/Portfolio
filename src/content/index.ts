@@ -5,3 +5,4 @@ export * from "./socials";
 export * from "./contact";
 
 
+export * from "./activity";
