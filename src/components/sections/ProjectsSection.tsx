@@ -127,7 +127,15 @@ export function ProjectItem({ item, open, onToggle }: ProjectItemProps) {
 function ProjectDetails({ item, className }: { item: Project; className?: string }) {
   return (
     <div className={cn("grid gap-6 md:grid-cols-5 md:gap-8", className)}>
-      <div className="md:col-span-3 space-y-3">
+      <div
+        className={cn(
+          "md:col-span-3",
+          // Phone screenshots sit side by side; wide ones stack
+          item.images.every((image) => image.height > image.width)
+            ? "grid grid-cols-3 gap-3"
+            : "space-y-3",
+        )}
+      >
         {item.images.map((image) => (
           <img
             key={image.src}
