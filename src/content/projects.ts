@@ -1,3 +1,7 @@
+import cilicaAssistant from "../public/projects/cilica-assistant.jpg";
+import cilicaTranscript from "../public/projects/cilica-transcript.jpg";
+import cilicaSearch from "../public/projects/cilica-search.jpg";
+import cilicaTasks from "../public/projects/cilica-tasks.jpg";
 import crmHome from "../public/projects/crm-home.jpg";
 import crmLeads from "../public/projects/crm-leads.jpg";
 import meetRoom from "../public/projects/meet-room.jpg";
@@ -37,6 +41,28 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    year: "2026",
+    name: "Cilica",
+    description:
+      "Local-first desktop notes app with an AI assistant and a bot-free meeting summariser.",
+    tech: ["Rust", "Tauri", "TypeScript", "React", "Whisper"],
+    summary:
+      "A free, open-source alternative to Granola. You write in Markdown, and Cilica, the built-in assistant, can read and edit every note. On calls it records your mic and system audio with no bot joining, transcribes on-device and writes a summary with decisions and action items.",
+    highlights: [
+      "Assistant that sorts, summarises and rewrites notes, with undo and diffs for every change",
+      "On-device Whisper transcription with speaker labels and voice recognition",
+      "Bring your own AI provider, including local models via Ollama or LM Studio",
+      "Imports from 45 apps, including Obsidian, Notion, Apple Notes and Granola",
+    ],
+    images: [
+      { src: cilicaAssistant, alt: "A meeting note with the Cilica assistant open after moving a note into a category", width: 1600, height: 1000 },
+      { src: cilicaTranscript, alt: "Meeting transcript with speaker labels and key quotes", width: 1600, height: 1000 },
+      { src: cilicaSearch, alt: "Search across notes with an option to ask Cilica", width: 1600, height: 1000 },
+      { src: cilicaTasks, alt: "Scheduled tasks for a notes review and weekly digest", width: 1600, height: 1000 },
+    ],
+    links: [{ label: "GitHub", url: "https://github.com/Benzo-Fury/cilica" }],
+  },
   {
     year: "2026",
     name: "POL CRM",
