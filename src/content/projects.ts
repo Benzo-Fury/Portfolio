@@ -10,9 +10,6 @@ import meetChat from "../public/projects/meet-chat.jpg";
 import riptideLibrary from "../public/projects/riptide-library.jpg";
 import riptideFiles from "../public/projects/riptide-files.jpg";
 import riptideSwarm from "../public/projects/riptide-swarm.jpg";
-import sistaToday from "../public/projects/sista-today.jpg";
-import sistaOnboarding from "../public/projects/sista-onboarding.jpg";
-import sistaArticle from "../public/projects/sista-article.jpg";
 
 export type ProjectImage = {
   src: string;
@@ -122,27 +119,6 @@ export const projects: Project[] = [
       { src: meetRoom, alt: "Live session room in speaker view with the meeting toolbar", width: 800, height: 500 },
       { src: meetSetup, alt: "Pre-join setup screen with camera preview and device pickers", width: 800, height: 500 },
       { src: meetChat, alt: "Live session with the chat panel open", width: 800, height: 500 },
-    ],
-    links: [],
-  },
-  {
-    year: "2026",
-    name: "Sista",
-    description:
-      "Women's cycle tracking app with predictions, symptom logging and personalised insights.",
-    tech: ["React Native", "Expo", "TypeScript"],
-    summary:
-      "A calm, dark-first cycle tracker. Sista predicts periods and ovulation, makes logging flow, symptoms and mood a single tap, and turns what you log into articles tied to your own cycle.",
-    highlights: [
-      "Today view with a cycle curve showing where you are and what's next",
-      "Quick logging for flow, symptoms and mood",
-      "Onboarding tailored to goals, including fertility and perimenopause",
-      "Learn articles personalised with patterns from your past cycles",
-    ],
-    images: [
-      { src: sistaToday, alt: "Sista today screen showing ovulation likely today on a cycle curve", width: 794, height: 1600 },
-      { src: sistaOnboarding, alt: "Sista onboarding asking what the app should help with", width: 791, height: 1600 },
-      { src: sistaArticle, alt: "Sista article on why sleep shifts before your period", width: 799, height: 1600 },
     ],
     links: [],
   },
